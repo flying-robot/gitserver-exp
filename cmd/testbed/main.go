@@ -4,16 +4,16 @@ import (
 	"context"
 	"log"
 
-	"github.com/flying-robot/gitserver/application"
-	"github.com/flying-robot/gitserver/proxy/fs"
-	"github.com/flying-robot/gitserver/proxy/git"
+	"github.com/flying-robot/gitserver/adapter/fs"
+	"github.com/flying-robot/gitserver/adapter/git"
+	"github.com/flying-robot/gitserver/service"
 )
 
 func main() {
 	// Clone a repository to the local machine.
-	err := application.HandleCloneRepository(
+	err := service.HandleCloneRepository(
 		context.Background(),
-		application.CloneRepository{
+		service.CloneRepository{
 			Source:      "https://github.com/flying-robot/commit-sink.git",
 			Destination: "/tmp/commit-sink.git",
 			MkdirAll:    fs.MkdirAll,
