@@ -6,8 +6,9 @@ import (
 )
 
 // Fetch downloads objects and refs from another repository.
-func Fetch(ctx context.Context, args ...string) ([]byte, error) {
+func Fetch(ctx context.Context, dir string, env []string, args ...string) ([]byte, error) {
 	cmd := exec.CommandContext(ctx, "git", "fetch", "--progress", "--prune", args[0])
-	cmd.Dir = args[1]
+	cmd.Dir = dir
+	cmd.Env = env
 	return cmd.CombinedOutput()
 }

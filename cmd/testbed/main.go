@@ -14,11 +14,12 @@ func main() {
 	err := service.HandleCloneRepository(
 		context.Background(),
 		service.CloneRepository{
-			Source:      "https://github.com/flying-robot/commit-sink.git",
-			Destination: "/tmp/commit-sink.git",
-			MkdirAll:    fs.MkdirAll,
-			Init:        git.Init,
-			Fetch:       git.Fetch,
+			Source:   "https://github.com/flying-robot/commit-sink.git",
+			WorkDir:  "/tmp/commit-sink.git",
+			Env:      []string{},
+			MkdirAll: fs.MkdirAll,
+			Init:     git.Init,
+			Fetch:    git.Fetch,
 		},
 	)
 	log.Printf("err=%v", err)
