@@ -1,6 +1,9 @@
-package git
+package service
 
-import "io"
+import (
+	"io"
+	"os"
+)
 
 // BaseArgs are provided to every subcommand and control the operating environment.
 type BaseArgs struct {
@@ -18,4 +21,15 @@ type InitArgs struct {
 type FetchArgs struct {
 	BaseArgs
 	Upstream string
+}
+
+// MkdirAllArgs configure the behavior of the MkdirAll command.
+type MkdirAllArgs struct {
+	Path string
+	Mode os.FileMode
+}
+
+type CloneRequest struct {
+	Upstream string
+	Local    string
 }
