@@ -19,13 +19,13 @@ type TracingGitAdapter struct {
 }
 
 // Init creates an empty Git repository or reinitializes an existing one.
-func (t *TracingGitAdapter) Init(ctx context.Context, args service.InitArgs) ([]byte, error) {
+func (t *TracingGitAdapter) Init(ctx context.Context, args service.InitArgs) error {
 	args.Env = append(args.Env, t.env()...)
 	return t.GitAdapter.Init(ctx, args)
 }
 
 // Fetch downloads objects and refs from another repository.
-func (t *TracingGitAdapter) Fetch(ctx context.Context, args service.FetchArgs) ([]byte, error) {
+func (t *TracingGitAdapter) Fetch(ctx context.Context, args service.FetchArgs) error {
 	args.Env = append(args.Env, t.env()...)
 	return t.GitAdapter.Fetch(ctx, args)
 }

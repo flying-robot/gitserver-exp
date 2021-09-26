@@ -18,11 +18,10 @@ func main() {
 			Filesystem: &filesystem.FilesystemAdapter{},
 			Git:        &git.GitAdapter{},
 		}
-		out, err := cloneRepoService.Clone(context.Background(), service.CloneRequest{
+		err := cloneRepoService.Clone(context.Background(), service.CloneRequest{
 			Upstream: "https://github.com/flying-robot/commit-sink.git",
 			Local:    "/tmp/commit-sink.git",
 		})
-		fmt.Println(string(out))
 		fmt.Println(err)
 		fmt.Println()
 	}
@@ -40,11 +39,10 @@ func main() {
 				TraceSetup:       true,
 			},
 		}
-		out, err := cloneRepoService.Clone(context.Background(), service.CloneRequest{
+		err := cloneRepoService.Clone(context.Background(), service.CloneRequest{
 			Upstream: "https://github.com/flying-robot/commit-sink.git",
 			Local:    "/tmp/commit-sink.git",
 		})
-		fmt.Println(string(out))
 		fmt.Println(err)
 		fmt.Println()
 	}

@@ -9,7 +9,9 @@ import (
 type BaseArgs struct {
 	Dir    string
 	Env    []string
+	Stdin  func(w io.Reader) io.Reader
 	Stdout func(w io.Writer) io.Writer
+	Stderr func(w io.Writer) io.Writer
 }
 
 // InitArgs configure the behavior of the Init subcommand.
