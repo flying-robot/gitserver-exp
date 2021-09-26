@@ -14,6 +14,9 @@ func (g *GitAdapter) Init(ctx context.Context, args InitArgs) ([]byte, error) {
 	cmd := exec.CommandContext(ctx, "git", "init", "--bare", ".")
 	cmd.Dir = args.Dir
 	cmd.Env = args.Env
+	if args.Stdout != nil {
+		cmd.Stdout = args.Stdout(cmd.Stdout)
+	}
 	return cmd.CombinedOutput()
 }
 
@@ -22,5 +25,8 @@ func (g *GitAdapter) Fetch(ctx context.Context, args FetchArgs) ([]byte, error) 
 	cmd := exec.CommandContext(ctx, "git", "fetch", "--progress", "--prune", args.Upstream)
 	cmd.Dir = args.Dir
 	cmd.Env = args.Env
+	if args.Stdout != nil {
+		cmd.Stdout = args.Stdout(cmd.Stdout)
+	}
 	return cmd.CombinedOutput()
 }
