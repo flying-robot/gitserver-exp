@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/flying-robot/gitserver/adapter/filesystem"
@@ -11,39 +10,25 @@ import (
 )
 
 func main() {
-	log.Println("cloning with default adapters")
-	{
-		fmt.Println("=================================================")
-		cloneRepoService := &service.CloneRepositoryService{
-			Filesystem: &filesystem.FilesystemAdapter{},
-			Git:        &git.GitAdapter{},
-		}
-		err := cloneRepoService.Clone(context.Background(), service.CloneRequest{
-			Upstream: "https://github.com/flying-robot/commit-sink.git",
-			Local:    "/tmp/commit-sink.git",
-		})
-		fmt.Println(err)
-		fmt.Println()
+	request := service.CloneRequest{
+		Upstream: "https://github.com/flying-robot/commit-sink.git",
+		Local:    "/tmp/commit-sink.git",
 	}
 
-	log.Println("cloning with tracing adapters")
-	{
-		fmt.Println("=================================================")
-		cloneRepoService := &service.CloneRepositoryService{
-			Filesystem: &filesystem.FilesystemAdapter{},
-			Git: &git.TracingGitAdapter{
-				Trace:            true,
-				TracePackAccess:  true,
-				TracePacket:      true,
-				TracePerformance: true,
-				TraceSetup:       true,
-			},
-		}
-		err := cloneRepoService.Clone(context.Background(), service.CloneRequest{
-			Upstream: "https://github.com/flying-robot/commit-sink.git",
-			Local:    "/tmp/commit-sink.git",
-		})
-		fmt.Println(err)
-		fmt.Println()
+	log.Println("cloning with default adapters")
+	cloneRepoService := &service.CloneRepositoryService{
+		Filesystem: &filesystem.Adapter{},
+		Git:        &git.Adapter{},
 	}
+	cloneRepoService.Clone(context.Background(), request)
+
+	log.Println("cloning with tracing adapters")
+	cloneRepoService.Git = &git.TracingAdapter{
+		Trace:            true,
+		TracePackAccess:  true,
+		TracePacket:      true,
+		TracePerformance: true,
+		TraceSetup:       true,
+	}
+	cloneRepoService.Clone(context.Background(), request)
 }

@@ -6,33 +6,33 @@ import (
 	"github.com/flying-robot/gitserver/service"
 )
 
-// A TracingGitAdapter delegates to a normal GitAdapter, but with Git's debugging
+// A TracingAdapter delegates to a normal Git Adapter, but with Git's debugging
 // environment variables configured for more verbose output.
-type TracingGitAdapter struct {
+type TracingAdapter struct {
 	Trace            bool
 	TracePackAccess  bool
 	TracePacket      bool
 	TracePerformance bool
 	TraceSetup       bool
 
-	GitAdapter
+	Adapter
 }
 
 // Init creates an empty Git repository or reinitializes an existing one.
-func (t *TracingGitAdapter) Init(ctx context.Context, args service.InitArgs) error {
+func (t *TracingAdapter) Init(ctx context.Context, args service.InitArgs) error {
 	args.Env = append(args.Env, t.env()...)
-	return t.GitAdapter.Init(ctx, args)
+	return t.Adapter.Init(ctx, args)
 }
 
 // Fetch downloads objects and refs from another repository.
-func (t *TracingGitAdapter) Fetch(ctx context.Context, args service.FetchArgs) error {
+func (t *TracingAdapter) Fetch(ctx context.Context, args service.FetchArgs) error {
 	args.Env = append(args.Env, t.env()...)
-	return t.GitAdapter.Fetch(ctx, args)
+	return t.Adapter.Fetch(ctx, args)
 }
 
 // env returns a slice of environment variables that configure Git to produce
 // more verbose debugging output.
-func (t *TracingGitAdapter) env() []string {
+func (t *TracingAdapter) env() []string {
 	var env []string
 	if t.Trace {
 		env = append(env, "GIT_TRACE=true")

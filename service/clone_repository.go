@@ -21,27 +21,23 @@ type CloneRepositoryService struct {
 
 // Clone materializes or reinitializes a repository on disk.
 func (c *CloneRepositoryService) Clone(ctx context.Context, req CloneRequest) error {
-	var (
-		baseArgs     = BaseArgs{Dir: req.Local, Stdout: writer.FlowrateWriter}
-		mkdirAllArgs = MkdirAllArgs{Path: req.Local, Mode: os.ModePerm}
-		initArgs     = InitArgs{BaseArgs: baseArgs}
-		fetchArgs    = FetchArgs{BaseArgs: baseArgs, Upstream: req.Upstream}
-	)
+	// These arguments are provided to all Git subcommands.
+	baseArgs := BaseArgs{Dir: req.Local, Stdout: writer.FlowrateWriter}
 
 	// First we need to set up the location for the repository, along with any
 	// intermediate directories on the way to that destination.
-	if err := c.Filesystem.MkdirAll(ctx, mkdirAllArgs); err != nil {
+	if err := c.Filesystem.MkdirAll(ctx, MkdirAllArgs{Path: req.Local, Mode: os.ModePerm}); err != nil {
 		return errors.Wrap(err, "filesystem.mkdirall")
 	}
 
 	// We can now initialize the repository in the given directory. The repository
 	// will be configured as "bare", without a working directory of its own.
-	if err := c.Git.Init(ctx, initArgs); err != nil {
+	if err := c.Git.Init(ctx, InitArgs{BaseArgs: baseArgs}); err != nil {
 		return errors.Wrap(err, "git.init")
 	}
 
 	// Now we can retrieve objects and refs from the upstream into the repository.
-	if err := c.Git.Fetch(ctx, fetchArgs); err != nil {
+	if err := c.Git.Fetch(ctx, FetchArgs{BaseArgs: baseArgs, Upstream: req.Upstream}); err != nil {
 		return errors.Wrap(err, "git.fetch")
 	}
 

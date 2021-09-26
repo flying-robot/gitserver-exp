@@ -10,7 +10,7 @@ const (
 	gigabit = int64(1000 * 1000 * 1000)
 )
 
-// A FlowrateWriter limits the write rate of w to 1 Gbps.
+// FlowrateWriter limits the write rate of w to 1 Gbps.
 //
 // We are cloning repositories from within the same network from another
 // Sourcegraph service (zoekt-indexserver). This can end up being so fast that
@@ -24,5 +24,5 @@ const (
 // We play it safe and default to 1 Gbps here (~119 MiB/s), which
 // means we can fetch a 1 GiB archive in ~8.5 seconds.
 func FlowrateWriter(w io.Writer) io.Writer {
-	return flowrate.NewWriter(w, 1)
+	return flowrate.NewWriter(w, gigabit)
 }
