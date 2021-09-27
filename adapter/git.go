@@ -37,7 +37,7 @@ func (g *Git) CmdWithConfig(cmd *exec.Cmd, args service.BaseArgs) *exec.Cmd {
 	// We occasionally use flow rate limiters to restrict bandwidth usage. If one
 	// is provided, it should wrap STDOUT.
 	if args.Stdout != nil {
-		cmd.Stdout = args.Stdout(os.Stdout)
+		cmd.Stdout = args.Stdout.Writer(os.Stdout)
 	}
 
 	// This makes Run() behave like CombinedOutput(), where STDOUT and STDERR

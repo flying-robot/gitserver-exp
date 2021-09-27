@@ -10,9 +10,9 @@ import (
 
 func main() {
 	request := service.CloneRequest{
-		Upstream:        "https://github.com/flying-robot/commit-sink.git",
-		Local:           "/tmp/commit-sink.git",
-		FlowRateLimiter: adapter.FlowrateWriter,
+		Upstream: "https://github.com/flying-robot/commit-sink.git",
+		Local:    "/tmp/commit-sink.git",
+		Stdout:   &adapter.FlowrateWriter{},
 	}
 
 	log.Println("cloning with default adapters")
