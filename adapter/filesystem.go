@@ -1,4 +1,4 @@
-package filesystem
+package adapter
 
 import (
 	"context"
@@ -7,11 +7,11 @@ import (
 	"github.com/flying-robot/gitserver/service"
 )
 
-// An Adapter allows gitserver to execute shell commands that access or mutate
+// A Filesystem adapter allows gitserver to execute shell commands that access or mutate
 // an underlying filesystem.
-type Adapter struct{}
+type Filesystem struct{}
 
 // MkdirAll creates a path on disk, including subdirectories, or returns an error.
-func (a *Adapter) MkdirAll(ctx context.Context, args service.MkdirAllArgs) error {
+func (f *Filesystem) MkdirAll(ctx context.Context, args service.MkdirAllArgs) error {
 	return os.MkdirAll(args.Path, args.Mode)
 }

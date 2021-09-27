@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 
-	"github.com/flying-robot/gitserver/adapter/writer"
 	"github.com/pkg/errors"
 )
 
@@ -22,7 +21,7 @@ type CloneRepositoryService struct {
 // Clone materializes or reinitializes a repository on disk.
 func (c *CloneRepositoryService) Clone(ctx context.Context, req CloneRequest) error {
 	// These arguments are provided to all Git subcommands.
-	baseArgs := BaseArgs{Dir: req.Local, Stdout: writer.FlowrateWriter}
+	baseArgs := BaseArgs{Dir: req.Local, Stdout: req.FlowRateLimiter}
 
 	// First we need to set up the location for the repository, along with any
 	// intermediate directories on the way to that destination.

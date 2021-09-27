@@ -4,26 +4,26 @@ import (
 	"context"
 	"log"
 
-	"github.com/flying-robot/gitserver/adapter/filesystem"
-	"github.com/flying-robot/gitserver/adapter/git"
+	"github.com/flying-robot/gitserver/adapter"
 	"github.com/flying-robot/gitserver/service"
 )
 
 func main() {
 	request := service.CloneRequest{
-		Upstream: "https://github.com/flying-robot/commit-sink.git",
-		Local:    "/tmp/commit-sink.git",
+		Upstream:        "https://github.com/flying-robot/commit-sink.git",
+		Local:           "/tmp/commit-sink.git",
+		FlowRateLimiter: adapter.FlowrateWriter,
 	}
 
 	log.Println("cloning with default adapters")
 	cloneRepoService := &service.CloneRepositoryService{
-		Filesystem: &filesystem.Adapter{},
-		Git:        &git.Adapter{},
+		Filesystem: &adapter.Filesystem{},
+		Git:        &adapter.Git{},
 	}
 	cloneRepoService.Clone(context.Background(), request)
 
 	log.Println("cloning with tracing adapters")
-	cloneRepoService.Git = &git.TracingAdapter{
+	cloneRepoService.Git = &adapter.TracingGit{
 		Trace:            true,
 		TracePackAccess:  true,
 		TracePacket:      true,

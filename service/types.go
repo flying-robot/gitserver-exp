@@ -5,12 +5,15 @@ import (
 	"os"
 )
 
+// A WriterWrapper allows output streams to be wrapped with useful functionality.
+type WriterWrapper func(w io.Writer) io.Writer
+
 // BaseArgs are provided to every subcommand and control the operating environment.
 type BaseArgs struct {
-	Dir      string                      // The working directory of the subcommand.
-	Env      []string                    // The key-value environment values, if any.
-	FlowRate int64                       // The write rate for Stdout.
-	Stdout   func(w io.Writer) io.Writer // The standard output stream.
+	Dir      string        // The working directory of the subcommand.
+	Env      []string      // The key-value environment values, if any.
+	FlowRate int64         // The write rate for Stdout.
+	Stdout   WriterWrapper // The standard output stream.
 }
 
 // InitArgs configure the behavior of the Init subcommand.
@@ -32,6 +35,7 @@ type MkdirAllArgs struct {
 
 // A CloneRequest is provided as input to the CloneRepository service.
 type CloneRequest struct {
-	Upstream string // The location of the repository to fetch from.
-	Local    string // The location where the repository will reside.
+	Upstream        string        // The location of the repository to fetch from.
+	Local           string        // The location where the repository will reside.
+	FlowRateLimiter WriterWrapper // A flow rate limiter to conserve bandwidth.
 }
